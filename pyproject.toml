@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "snake_py"
+version = "0.1.0"
+description = ""
+authors = ["bartosz121 <bmagiera121@gmail.com>"]
+
+[tool.poetry.scripts]
+snake-py = "snake_py.main:run"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+black = { version = "^22.6.0", allow-prereleases = true }
+mypy = "^0.961"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
