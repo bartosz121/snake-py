@@ -59,6 +59,27 @@ def c_main(stdscr: "curses._CursesWindow") -> int:
             random.randrange(1, curses.COLS), random.randrange(1, curses.LINES)
         )
 
+    def validate_position(pos: Position) -> Position:
+        """Check if position in in bounds of curses window, and change if needed"""
+        max_y = curses.LINES
+        max_x = curses.COLS
+
+        x = pos.x
+        y = pos.y
+
+        if x < 0:
+            x = max_x - 1
+        elif x > max_x - 1:
+            x = 0
+
+        if y < 0:
+            y = max_y - 1
+        elif y > max_y - 1:
+            y = 0
+
+        return Position(x, y)
+
+    curses.use_default_colors()
     curses.curs_set(False)
     stdscr.nodelay(True)
     start_pos = get_random_pos()
@@ -73,7 +94,9 @@ def c_main(stdscr: "curses._CursesWindow") -> int:
         curses.KEY_LEFT,
     )
 
-    curses_mapms = 110
+    curses_napms = 110
+    curses_napms_step_after_apple_eaten = -2
+
     drawer = CursesDrawer(snake_config, stdscr)
     controller = CursesController(controller_config)
     snake_ = snake.Snake(start_pos)
@@ -81,7 +104,7 @@ def c_main(stdscr: "curses._CursesWindow") -> int:
 
     direction = Direction.RIGHT
     while True:
-        curses.napms(curses_mapms)
+        curses.napms(curses_napms)
         stdscr.erase()
         stdscr.refresh()
 
@@ -91,9 +114,10 @@ def c_main(stdscr: "curses._CursesWindow") -> int:
         if snake_.get_pos() == apple.pos:
             snake_.add_tail()
             apple.pos = get_random_pos()
-            curses_mapms -= 5
+            curses_napms += curses_napms_step_after_apple_eaten
 
         new_pos = controller.get_pos_after_turn(direction, snake_.get_pos())
+        new_pos = validate_position(new_pos)
         snake_.change_pos(new_pos)
 
         try:
