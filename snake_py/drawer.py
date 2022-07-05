@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from snake_py import game_obj, snake
+from snake_py import game_obj, snake_config
 
 
 class Drawer(ABC):
-    def __init__(self, config: snake.SnakeConfig) -> None:
+    def __init__(self, config: snake_config.SnakeConfig) -> None:
         self.config = config
 
     @abstractmethod
