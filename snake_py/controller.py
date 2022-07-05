@@ -1,15 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import NamedTuple, TypeAlias
-from enum import Enum, auto
 
-from snake_py import position
-
-
-class Direction(Enum):
-    UP = auto()
-    RIGHT = auto()
-    DOWN = auto()
-    LEFT = auto()
+from snake_py import snake_move, position, direction
 
 
 KeyMapping: TypeAlias = str | int
@@ -26,8 +18,17 @@ class Controller(ABC):
     def __init__(self, config: ControllerConfig) -> None:
         self.config = config
 
+    def is_move_forbidden(
+        self,
+        current_direction: direction.Direction,
+        new_direction: direction.Direction,
+        snake_body_count: int,
+    ) -> bool:
+        if snake_body_count > 1:
+            if current_direction.opposite_direction() == new_direction:
+                return True
+        return False
+
     @abstractmethod
-    def get_pos_after_turn(
-        self, direction: Direction, current_pos: position.Position
-    ) -> position.Position:
+    def get_pos_after_turn(self, move: snake_move.SnakeMove) -> position.Position:
         ...
