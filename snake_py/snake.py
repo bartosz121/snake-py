@@ -1,11 +1,4 @@
-from typing import NamedTuple
-
 from snake_py import position, game_obj
-
-
-class SnakeConfig(NamedTuple):
-    snake_char: str
-    apple_char: str
 
 
 class Snake:
